@@ -1,18 +1,18 @@
-import { expect, browser, $ } from '@wdio/globals'
+import { expect, browser } from '@wdio/globals'
 
 describe ('Window test', () => {
 
     it ('should open a new window and switch windows', async () => {
-        
+
         // open url
-        await browser.url('https://the-internet.herokuapp.com/windows')
+        await browser.url('/windows')
         await expect(browser).toHaveTitle('The Internet')
 
         // get windows handle
         const originalWindow = await browser.getWindowHandle()
 
         // create new window
-        await browser.newWindow('https://the-internet.herokuapp.com/windows/new')
+        await browser.newWindow('/windows/new')
         await expect(browser).toHaveTitle('New Window')
 
         // validate that there are now two windows
@@ -20,7 +20,7 @@ describe ('Window test', () => {
         expect(allWindows.length).toBe(2)
 
         // switch back via url match
-        await browser.switchWindow('the-internet.herokuapp.com/windows')
+        await browser.switchWindow('/windows')
 
         // switch back via title
         await browser.switchWindow('New Window')

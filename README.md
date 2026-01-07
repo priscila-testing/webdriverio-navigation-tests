@@ -9,6 +9,8 @@ Practice project for end-to-end (E2E) automated testing using **WebdriverIO** + 
 - JavaScript alerts, confirms, and prompts
 - Switching between windows/tabs
 - Browser session management
+- Basic HTTP Authentication (login with username & password)
+- Taking screenshots of pages and specific elements
 
 ## Tech Stack
 

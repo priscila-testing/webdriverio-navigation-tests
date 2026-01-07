@@ -1,3 +1,4 @@
+import { expect } from 'expect-webdriverio'
 import path from 'path'
 
 const downloadDir = path.join(process.cwd(), 'downloads')
@@ -57,6 +58,12 @@ export const config = {
         browserName: 'chrome',
         'wdio:enforceWebDriverClassic': true,
         'goog:chromeOptions': {
+            args: [
+                '--no-sandbox',
+                '--disable-infobars',
+                '--disable-gpu',
+                '--window-size=1280,800'
+            ],
             prefs: {
                 'download.default_directory': downloadDir,
                 'download.prompt_for_download': false,
@@ -96,7 +103,7 @@ export const config = {
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
     // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
     // gets prepended directly.
-    // baseUrl: 'http://localhost:8080',
+    baseUrl: 'https://the-internet.herokuapp.com',
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 10000,
@@ -196,8 +203,19 @@ export const config = {
      * @param {Array.<String>} specs        List of spec file paths that are to be run
      * @param {object}         browser      instance of created browser/device session
      */
-    // before: function (capabilities, specs) {
-    // },
+    before: async function () {
+
+        browser.addCommand('openHome', async function () {
+            await this.url('/')
+            await expect(this).toHaveTitle('The Internet')
+        })
+
+        browser.overwriteCommand('refresh', async function (origRefresh) {
+            console.log('Page refreshed')
+            await origRefresh()
+        })
+
+    },
     /**
      * Runs before a WebdriverIO command gets executed.
      * @param {string} commandName hook command name
@@ -238,9 +256,15 @@ export const config = {
      * @param {boolean} result.passed    true if test has passed, otherwise false
      * @param {object}  result.retries   information about spec related retries, e.g. `{ attempts: 0, limit: 0 }`
      */
-    // afterTest: function(test, context, { error, result, duration, passed, retries }) {
-    // },
+    afterTest: async function (test, context, { error, result, duration, passed, retries }) {
 
+        if (!passed) {
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
+            await browser.saveScreenshot(`./screenshots/${test.title}-${timestamp}.png`)
+
+        }
+
+    }, // take auto screenshot when fail
 
     /**
      * Hook that gets executed after the suite has ended

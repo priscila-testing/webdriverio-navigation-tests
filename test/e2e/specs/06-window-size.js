@@ -3,7 +3,7 @@ import { expect, browser, $ } from '@wdio/globals'
 describe('Window size manipulation', () => {
 
     beforeEach(async () => {
-        await browser.url('https://example.com')
+        await browser.openHome()
         await expect($('h1')).toBeDisplayed()
     })
 
@@ -15,7 +15,7 @@ describe('Window size manipulation', () => {
         expect(size.width).toBeLessThanOrEqual(803)
         expect(size.height).toBeGreaterThanOrEqual(598)
         expect(size.height).toBeLessThanOrEqual(603)
-
+        
     })
 
     it('should maximize the browser window', async () => {

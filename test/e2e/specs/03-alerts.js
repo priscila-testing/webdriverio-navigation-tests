@@ -10,7 +10,7 @@ describe('Alerts tests', () => {
     }
 
     beforeEach(async () => {
-        await browser.url('https://the-internet.herokuapp.com/javascript_alerts')
+        await browser.url('/javascript_alerts')
         await expect($('h3')).toBeDisplayed()
         await expect($('h3')).toHaveText('JavaScript Alerts')
     })
